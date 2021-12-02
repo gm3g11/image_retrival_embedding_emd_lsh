@@ -12,7 +12,7 @@ import os
 import math
 # import pylshbox
 # import libpylshbox
-
+import heapq
 
 try:
     os.remove("./database/.DS_Store")
@@ -254,14 +254,33 @@ print ("Embedding for each image complete.! check once for speed")
 #     Finally get f(p)-f(q) for each query image
 #     Uncomment this to test
 # '''
-# queryImageCount = 0
-# for queryImageVector in velistQuery:
-#     imageCount = 0
-#     for imageVector in velist:
-#         print ('diff between ',queryImageNames[queryImageCount], 'and',imageFileNames[imageCount],'is',\
-#             np.sum(np.absolute(np.subtract(np.array(imageVector),np.array(queryImageVector)))))
-#         imageCount+=1
-#     queryImageCount+=1
+
+
+queryImageCount = 0
+retrival={}
+for queryImageVector in velistQuery:
+    imageCount = 0
+    dist=[]
+    for imageVector in velist:
+        l1=np.sum(np.absolute(np.subtract(np.array(imageVector),np.array(queryImageVector))))
+        print ('diff between ',queryImageNames[queryImageCount], 'and',imageFileNames[imageCount],'is',l1)
+        dist.append(l1)
+        imageCount+=1
+    top5_index=list(map(dist.index,heapq.nsmallest(5,dist)))
+    for index in top5_index:
+        query_img=queryImageNames[queryImageCount]
+        retrival_img=imageFileNames[index]
+        if query_img not in retrival:
+            retrival[query_img]=[retrival_img]
+        else:
+            retrival[query_img].append(retrival_img)
+
+
+    queryImageCount+=1
+retrival_file = open("retrival.pkl", "wb")
+pickle.dump(retrival , retrival_file )
+retrival_file .close()
+
 
 # '''
 #     LSH
