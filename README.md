@@ -1,7 +1,7 @@
 ## Fast image retrieval via embeddings
 The code contains the implementation of idea of the following [paper](https://goo.gl/zTYBS7) with our improvements.
 ### File descriptions
-* [code.py](code.py) : 
+* [main.py](main.py) : 
   * This file contains the loading of images from database and query and make two separate lists of them.
   * These images are clustered based on their sillhoute score which is done in a distributed way as it is computaionally expensive which will be explained later.
   * The clustered images are embedded into vectors as explained in paper and are sliced and hashed to decrease the vector size.Each image has a unique vector.
